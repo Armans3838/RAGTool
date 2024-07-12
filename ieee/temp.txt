@@ -1,0 +1,1334 @@
+Received February 6, 2020, accepted March 3, 2020, date of publication March 19, 2020, date of current version March 30, 2020.
+Digital Object Identifier 10.1109/ACCESS.2020.2981482
+
+Signal Processing of Coast-Ship Bistatic
+High-Frequency Surface-Wave Radar Using
+One-Bit Quantized Measurement
+BINGFAN LIU , BAIXIAO CHEN , AND MINGLEI YANG
+National Laboratory of Radar Signal Processing, Xidian University, Xi’an 710071, China
+
+Corresponding author: Baixiao Chen (bxchen@xidian.edu.cn)
+This work was supported by the National Natural Science Foundation of China under Grant 61571344.
+
+ABSTRACT The feasibility of one-bit quantization in coast-ship bistatic high-frequency surface-wave
+radar (HFSWR) is mainly discussed in order to enjoy the advantages of simplicity, low cost and low power
+consumption. Our theoretical derivation shows that the received signal after one-bit quantization can be
+expressed as a linear combination of infinite components. These components include the original component
+and the high-order components that can be regarded as the interference terms. Then, the variation of the
+magnitude of each component with the signal-to-noise ratio (SNR) is given. To reduce the negative impact of
+these high-order components on the radar system, the detailed signal forms are analyzed. Furthermore, some
+comparative simulations of one-bit quantization and traditional high-precision quantization are provided
+to verify the correctness of our theoretical analysis. Both theories and simulation results indicate that
+the high-order components can be ignored in coast-ship bistatic HFSWR and that one-bit quantization is
+effective. Finally, real data analysis also validates the efficiency of one-bit quantization in practice.
+INDEX TERMS One-bit radar, bistatic high-frequency surface-wave radar, MIMO radar.
+
+I. INTRODUCTION
+
+The coast-ship bistatic high-frequency surface-wave radar
+(HFSWR) has been capable of playing the irreplaceable
+role in monitoring the sea surface state and tracking targets
+with the virtues of low cost and the ability of operation in
+all weathers [1]. And the coast-ship bistatic HFSWR combines the benefits of high-frequency radar and bistatic radar.
+Since the receiving station does not radiate energy, the coastship bistatic HFSWR has better performance in flexibility,
+maneuverability and the ability to provide long early warning
+time [2], [3]. Inspired by the synthetic impulse and aperture
+radar (SIAR) [4], [5], a novel coast-ship bistatic HFSWR with
+multiple carrier frequencies has been proposed in [6], [7].
+The radar system in [6], [7] employs an array mounted
+on the coast to simultaneously transmit a set of orthogonal
+waveforms, and an omni-antenna on a ship to receive echo
+signals. Thus, this radar system is similar to multiple-input
+multiple-output (MIMO) radar [8]. By proper processing,
+an equivalent transmitting pattern is formed with a reception
+antenna [9].
+The associate editor coordinating the review of this manuscript and
+approving it for publication was Chengpeng Hao
+55578
+
+.
+
+The most significant advantage of the radar system in [9]
+is that plenty of ships could share a common transmitting
+array. There are two potential applications. One is that in the
+civilian field, a large number of fishing boats can be warned of
+surrounding non-cooperative dangerous targets, e.g. pirates.
+The other one is that in the military field, a large number of
+unmanned boats with small size perform detection jointly in a
+area close to the enemy targets. The coming challenge is how
+to reduce equipment costs. Recently, a low-cost radar technology, one-bit quantization technology, has emerged [10], [11].
+One-bit quantization refers to a one-bit analog-to-digital Converter. Traditional ADCs have many bits in order to make the
+signal undistorted. For one-bit quantization, only one bit is
+used to represent the signal amplitude at a certain time, which
+means that expensive high-precision ADCs can be replaced
+with cheaper comparators. And the following advantages can
+be achieved by one-bit quantization technology. (1) Low cost
+and low power consumption are conducive to miniaturization
+of equipment. (2) Comparator is easy to achieve higher rate
+sampling. (3) One-bit quantized data is beneficial to store and
+process.
+In [12]–[15], processing of synthetic aperture radar (SAR)
+data coded with one-bit was considered. First of all, basic
+
+This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+
+VOLUME 8, 2020
+
+B. Liu et al.: Signal Processing of Coast-Ship Bistatic HFSWR Using One-Bit Quantized Measurement
+
+processing in SAR, pulse compression or convolution operation, was discussed in detail in spectrum analysis, computation burden, and data storage [12]. Results in [12] show that
+time-domain convolution between binary sequences allows
+a mass storage saving with respect to the conventional convolution performed via Fast Fourier Transforms (FFTs), and
+in several cases also a time saving. Most importantly, when
+the signal-to-noise ratio (SNR) is low, the matched filter is
+still effective. Next, the information of SAR raw signal can be
+restored from the one-bit quantized signal and the image does
+not exhibit any appreciable degradation [13], [14]. In [15],
+a SAR platform using one-bit quantization processed binary
+data in real time with simple, small low-cost and low-power
+devices.
+The effects of one-bit quantization on the direction-ofarrival (DOA) estimation accuracy have also been analyzed
+in [16]. The corresponding one-bit Cramér-Rao bound (CRB)
+for a two-sensor array has been derived. Numerical results
+in [16] show that using one-bit quantization may be an elegant
+choice for DOA systems and can provide reasonable practical
+accuracy. However, in essence, one-bit quantization does lose
+some information and introduce new interferences. In order
+to get better estimation accuracy, some novel DOA estimation
+methods have been introduced [17]–[19], such as support
+vector machine (SVM) based method [17], binary iterative
+hard thresholding (BIHT) method [18] and Sparse Bayesian
+Learning (SBL) based method [19]. Classical subspace-based
+methods, such as multiple signal classification (MUSIC),
+have been verified to be straightforwardly applied without
+extra pre-processing [20]. In addition, it is shown in [21]
+that sparse arrays (nested and coprime arrays) are more
+robust to the deleterious effects of one-bit quantization,
+compared to uniform linear arrays (ULAs). For 5G wireless communication system, one-bit ADC has been widely
+studied in channel estimation, DOA estimation and system
+performance [22], [23].
+Recently, one-bit quantization has once again attracted
+considerable research interest in radar [10], [24]–[26].
+In [10], the conventional radar measurement scheme is
+replaced by the one-bit sampling with Gaussian and uniform
+dithering. The one-bit samples can be efficiently processed
+by using conventional methods proposed for high-precision
+samples. Sampling with dithering is also known as sampling
+with time-varying thresholds in [24]–[26]. The problem of
+sparse parameter estimation with one-bit quantization was
+considered in [24]. And the CRB for parameters of the single
+sinusoidal case was computed for a variety of parameter
+values [25]. Also for one-bit sampling with time-varying
+thresholds in [26], the target estimation is formulated as
+a multivariate weighted-least-squares optimization problem
+that can be solved in a cyclic manner. In [11], one-bit linear
+frequency modulated continuous wave (LFMCW) radar was
+studied and a two-stage target detection approach termed
+as dimension reduction generalized-approximate-messagepassing (DR-GAMP) was proposed. It is worth noting that
+in [10], [11], [24]–[26], there is a common interesting
+VOLUME 8, 2020
+
+FIGURE 1. Geometry of the coast-ship bistatic HFSWR.
+
+phenomenon: for one-bit quantization, higher SNR does not
+necessarily lead to better parameter estimation performance.
+Essentially, the fewer the number of quantization bits,
+the more distortion the signal has. A natural question is: as an
+extremely low precision quantization, can one-bit quantization ensure that the information is not lost and the parameter
+measurement function of coast-ship bistatic HFSWR is not
+affected? The main goal of this study will answer the question
+and the main contributions are summarized as follows:
+(1) The components of the received one-bit signal in
+coast-ship bistatic HFSWR are analyzed. One-bit quantization will result in additional high-order components.
+The variations of these components with respect to SNR
+are given. It can be found that the lower the SNR,
+the larger the difference between the average amplitudes of the high-order components and the original
+components.
+(2) The signal forms of high-order components are analyzed. High-order components with different slopes,
+Doppler information, and distance information from the
+original component cannot be accumulated in traditional
+signal processing (e.g. pulse compression, beamforming, and coherent integration).
+(3) The feasibility of one-bit in the coast-ship bistatic
+HFSWR is verified by numerical simulations and
+analysis of measured data. Traditional processing
+methods in the coast-ship bistatic HFSWR are verified to be straightforwardly applied. Compared with
+high-precision quantization, one-bit quantization has
+almost no loss. Therefore, one-bit quantization has great
+potential in the coast-ship bistatic HFSWR.
+The rest of this paper is organized as follows. In Section II,
+an overview of the coast-ship bistatic HFSWR system and
+signal model are introduced. In Section III, the components of
+the received one-bit signal are analyzed. Then, multi-carrier
+frequency LFMICW signal processing is developed and
+detailed in Section IV. Simulation results are provided in
+Section V, and the measured data is analyzed in Section VI.
+This paper is concluded in Section VII.
+II. SYSTEM OVERVIEW AND SIGNAL MODEL
+
+The geometry of the coast-ship bistatic HFSWR system is
+illustrated in Fig. 1. The transmitting array (Tx) of the radar
+55579
+
+B. Liu et al.: Signal Processing of Coast-Ship Bistatic HFSWR Using One-Bit Quantized Measurement
+
+FIGURE 2. Receiver architecture using one-bit quantized measurement.
+
+is a uniform linear array with K antennas, which is placed
+along the coast. And the receiver system (Rx) with a single
+antenna is mounted on the boat. The frequency-modulated
+interruptive continuous waves (FMICW) with multiple
+carrier frequencies are adopted. The carrier frequencies of transmitting antennas are different from each
+other, which ensures the orthogonality of the transmitted
+waveform.
+The receiver architecture is illustrated in Fig. 2. Different from high-precision ADCs used in conventional
+coast-ship bistatic HFSWR, one-bit ADCs are used here.
+The received signals are filtered, amplified at a low noise
+level, and sampled at intermediate frequency (IF) by the
+one-bit ADCs. Other signal processing procedures are
+consistent with that of the conventional coast-ship bistatic
+HFSWR with high-precision ADCs. The sampled signals are
+mixed with the multiple reference signals with the carrier
+frequencies corresponding to the transmit antennas, and separated through a low-pass filtered (LPF) individually, which
+is co-called channel separation. After the fast Fourier transform (FFT), i.e., range transforming, the output signal of
+each channel is obtained. The equivalent transmit beampatterns can be obtained by transmitter synthesis processing. In
+order to significantly improve target detection performance,
+it is necessary to perform the coherent integration. Then,
+we obtain the three basic parameters of target: distance, direction, and speed.
+Assuming that fc is the carrier frequency, the transmitted
+signal in one sweep period can be expressed by
+sk (t) = g(t) exp(j2πfk t + jπµt 2 ),
+0 ≤ t ≤ T , k = 1, 2, · · · , K
+
+(1)
+
+where K is number of transmit antennas, fk = fc + 1fk is
+the frequency of kth antenna, 1fk = ck 1f , ck ∈ {−(K −
+1)/2, . . . , (K − 1)/2}
+PI is frequency coding, 1f is frequency
+spacing, g(t)
+=
+i=1 rect(t − iTr ) is the pulse gate signal,
+(
+1, 0 ≤ t ≤ Te
+rect(t) =
+, Tr is the pulse repetition period,
+0, others
+Te is the pulse width, µ is sweep rate, T is sweep period, the
+55580
+
+FIGURE 3. Time-frequency relationship of received signal.
+
+sweep bandwidth B = µT and I denotes the number of pulse
+in one sweep period. The time-frequency relationship of the
+transmitted signal is shown in Fig. 3.
+The received signal is given by
+r(t) =
+
+P X
+K
+X
+
+βp sk (t − τk,p ) + w(t)
+
+(2)
+
+p=1 k=1
+
+where P is the number of targets, βp = Ap exp(jψp ) is the
+reflection complex coefficient of the pth target, Ap and ψp
+denote the amplitude and the phase of the complex coefficient, τk,p = (Rp − nvp T − dk sin θp )/c, Rp = RT,p + RR,p
+represents the sum of the distance from the transmitting
+array to the pth target and the distance from the pth target
+to the receiving array, c is the speed of light, vp is the
+equivalent speed of the pth target, dp is the distance of the
+kth antenna from the referenced antenna, θp is the direction
+of pth target relative to the transmitting array, and w(t) is
+complex Gaussian noise with zero mean and covariance 2σw2 .
+In Fig. 3, there are three targets, two of which coincide in the
+time domain and the remaining one is not affected by other
+targets.
+After one-bit ADC sampling, the received signal can be
+modeled as
+v(t) = sign{rR (t)} + j · sign{rI (t)}
+
+
+P X
+K
+X
+
+= sign
+Ap g(t − τk,p ) cos(8k,p (t)) + wR (t)
+
+
+p=1 k=1
+
+P X
+K
+X
+π
++ j · sign
+Ap g(t − τk,p ) cos(8k,p (t) − )
+
+2
+p=1 k=1
+
++wI (t)}
+
+(3)
+VOLUME 8, 2020
+
+B. Liu et al.: Signal Processing of Coast-Ship Bistatic HFSWR Using One-Bit Quantized Measurement
+
+where rR (t) and rI (t) denote the real and imaginary parts of
+r(t), wR (t) and wI (t) denote the real and imaginary parts of
+w(t) respectively and sign(·) is signum function. Here, wR (t)
+and wI (t) are Gaussian random variables with zero mean and
+covariance σw2 , and 8k,p is written as
+8k,p (t) = 2πfk (t − τk,p ) + πµ(t − τk,p ) + ψp
+≈ 2πfk t + 2πfk (dk sin θp /c − τp )
+2
+
+(p)
+
++ π µt 2 − 2πµtτp +2πfd nT +ψp +πµτp2
+(p)
+
+III. ANALYSIS OF ONE-BIT QUANTIZED SIGNAL
+A. SIGNAL ANALYSIS FOR ONE TARGET
+
+Without loss of generality, the real part of the received one-bit
+signal is analyzed. We first consider a segment of the received
+signal when there is only one target, e.g. the segment where
+target A is located as shown in Fig. 3. The echo of this
+target does not overlap with other target echoes, which is the
+simplest case.
+The real part of the received one-bit signal can be expressed
+in the following integral form [12]
+Z
+j ∞ exp(jrR (t)ξ )
+dξ
+vR (t) = sign{rR (t)} = −
+π −∞
+ξ
+Z ∞
+j
+exp(jwR (t)ξ )
+=−
+π −∞
+ξ
+)
+( K
+X
+A1 cos(8k,1 (t))ξ dξ
+× exp j
+k=1
+
+j
+=−
+π
+
+K
+
+exp(jwR (t)ξ ) Y
+ξ
+−∞
+k=1
+
+× exp j A1 cos(8k,1 (t))ξ dξ.
+
+By using the expansion [13]
+
+exp j A1 cos(8k,1 (t))ξ
+∞
+X
+=
+εm jm Jm (A1 ξ ) cos(m8k,1 (t))
+
+(5)
+
+(6)
+
+m=0
+
+where ε0 = 1, εm = 2 for m 6 = 0, and Jm (·) is the Bessel
+function of the first kind, equation (5) can be rewritten as:
+Z
+K
+j ∞ exp(jwR (t)ξ ) Y
+vR (t) = −
+π −∞
+ξ
+k=1
+
+
+∞
+X
+
+εmk,1 jmk,1 Jmk,1 (A1 ξ ) cos(mk,1 8k,1 (t)) dξ
+
+=
+
+mk,1 =0
+∞
+∞
+X X
+m1,1 =0 m2,1 =0
+
+VOLUME 8, 2020
+
+···
+
+∞
+X
+mK ,1 =0
+
+K
+Y
+
+cos(mk,1 8k,1 (t))
+
+(7)
+
+k=1
+
+where
+m1,1 ,··· ,mK ,1 = −
+
+j
+π
+
+Z ∞
+
+exp(jwR (t)ξ )
+ξ
+−∞
+K
+Y
+εmk,1 jmk,1 Jmk,1 (A1 ξ )dξ.
+
+(4)
+
+where τp = Rp /c, fd = fc vp /c is the Doppler frequency of
+the pth target.
+Noting that sign(·) is a non-linear function. One-bit quantization can no longer guarantee that the received signal is
+a linear combination of the echoes of different antennas and
+different targets.
+
+Z ∞
+
+m1,1 ,··· ,mK ,1 ·
+
+(8)
+
+k=1
+
+PIt can be seen from (7) that the original components
+( K
+k=1 mk,1 = 1) are preservedPafter one-bit quantization. Besides, new components ( K
+k=1 mk,1 ≥ 2), called
+high-order harmonics in [9], are generated. Then, we analyze
+the amplitudes of these new components that could have a
+negative effect on traditional signal processing. The amplitudes of all components {m1,1 ,··· ,mK ,1 } are related to noise
+wR . The mean of m1,1 ,··· ,mK ,1 with respect to wR is
+< m1,1 ,··· ,mK ,1 >
+Z
+Z
+w2
+− R2 exp(jwR ξ )
+1
+j ∞ ∞
+p
+e σw ·
+=−
+π −∞ −∞ 2π σw2
+ξ
+K
+Y
+
+εmk,1 jmk,1 Jmk,1 (A1 ξ )dξ dwR
+
+k=1
+
+j
+=−
+π
+
+2ξ2
+σw
+
+e− 2
+ξ
+−∞
+
+Z ∞
+
+K
+Y
+
+εmk,1 jmk,1 Jmk,1 (A1 ξ )dξ.
+
+(9)
+
+k=1
+
+PK
+Let m =
+k=1 mk,1 be the order of the component. By
+using the equations
+Ji (x) = Ji (−x)
+Ji (x) = −Ji (−x)
+
+for i being even
+for i being odd,
+
+(10)
+(11)
+
+< m1,1 ,··· ,mK ,1 >= 0 when m is even. Then we focus
+on the analysis of the case where m is odd. For K = 1
+or 2, a closed solution to a similar problem has been given
+in [10]. For K > 2, it is difficult to obtain a closed solution
+of (9). However, we could use Matlab software to calculate
+< m1,1 ,··· ,mK ,1 > so that we have an understanding of the
+magnitude of these components.
+The SNR is defined as
+SNR =
+
+A2p
+2σw2
+
+.
+
+(12)
+
+Fig. 4 shows the variation of the main components (m =
+1, 3, 5) with SNR after one-bit quantization for arrays with
+different numbers of antennas. The legends ’1’, ’3’, ’5’
+in Fig. 4 (a) represent the components < 1 >, < 3 >
+and < 5 > respectively. In Fig. 4 (b), ’1-1-1’ means that
+three of {mk,1 }K
+k=1 are 1, and the rest are 0. ’2-3’ represents
+the component < m1,1 ,··· ,mK ,1 > that one of {mk,1 }K
+k=1 is 2,
+one is 3, and the rest are 0. By analogy, the meaning of other
+legends can be derived.
+It can be seen from Fig. 4 (b-d) that for components with
+the same order m, the curves of the amplitude (dB) as a
+55581
+
+B. Liu et al.: Signal Processing of Coast-Ship Bistatic HFSWR Using One-Bit Quantized Measurement
+
+FIGURE 4. Variation of the average amplitudes of the main components (m = 1, 3, 5) with the SNR after one-bit quantization
+for arrays with the number of antennas (a) K = 1, (b) K = 4, (c) K = 8, and (d) K = 16.
+
+function of SNR are parallel to each other at a low SNR (dB).
+In Fig. 4, the solid lines, the dashed lines, and the dotted lines
+represent first-order, third-order, and fifth-order components,
+respectively. And the larger the order m, the smaller the
+component amplitude. And the larger the order m, the smaller
+the component amplitude. Therefore, there is no further discussion of the components with a large order (m > 3). For
+regions with low SNR, the amplitude difference between
+the original component (m = 1) and the high-order component is large. As SNR increases, all components tend to
+be flat, and the magnitudes of the high-order components
+are close to the magnitude of the original component. This
+phenomenon tells us that one-bit quantization can work well
+in the case of low SNR, and well explain that the presence of ’ghost scatterers’ tend to disappear as the noise
+level is increased in [12], and can also explain that the
+one-bit Gaussian dithered samples can be processed efficiently by using the conventional algorithm proposed for the
+infinite precision samples when noise is sufficiently large
+in [10].
+Fig. 5 shows the average amplitude difference between the
+original component and the maximum high-order component.
+When SNR = −20 dB, the maximum high-order component
+is already 45 dB smaller than the original component.
+55582
+
+FIGURE 5. Average amplitude difference between the original
+component and the maximum higher-order component.
+
+For a clearer understanding of high-order components,
+Fig. 6 shows the time-frequency relationship of one-bit quantized signals with SNR = 10, −5 dB when K = 1. For
+K = 1, we know from (7) that the possible components
+are cos 8i,1 , cos 38i,1 , and cos 58i,1 . Their imaginary parts
+can be written as cos(8i,1 − π/2), cos(38i,1 − 3π/2), and
+cos(58i,1 − 5π/2), and their complex forms can be written
+VOLUME 8, 2020
+
+B. Liu et al.: Signal Processing of Coast-Ship Bistatic HFSWR Using One-Bit Quantized Measurement
+
+FIGURE 6. Time-frequency relationship of one-bit quantized signal
+(K = 1). (a) SNR = 10 dB, (b) SNR = −5 dB.
+
+as exp(j8i,1 ), exp(−j38i,1 ), and exp(j58i,1 ). In Fig. 6 (a),
+the original component has the highest amplitude. The sweep
+rate of the 3-order component is negative. The sweep rate of
+the 5-order component is positive, and due to the limitation
+of the sampling frequency, the spectrum has an ambiguity
+phenomenon. The SNR in Fig. 6 (b) is lower, and only the
+original component can be observed. For K = 4, Fig. 7
+shows similar results to Fig. 6, except for the more complex
+high-order components.
+In addition, the bandwidths of the high-order components
+are broadened. The influence of the high-order components
+on the original components can be further reduced in traditional processing. Taking the 3-order component as an
+example, the signal forms of the possible components are as
+follows:
+cos 38i,1 cos 28i,1 cos 8j,1 cos 8i,1 cos 8j,1 cos 8k,1
+(1 ≤ i, j, k ≤ K ) (13)
+Using the trigonometric identities, the above components
+(13) can be decomposed into the following components:
+const, cos 8i,1 , cos 38i,1 , cos(28i,1 ± 8j,1 ),
+cos(±8i,1 ± 8j,1 ± 8k,1 ) (1 ≤ i, j, k ≤ K )
+(14)
+VOLUME 8, 2020
+
+FIGURE 7. Time-frequency relationship of one-bit quantized signal
+(K = 4). (a) SNR = 10 dB, (b) SNR = −5 dB.
+
+Except for the constant component const and the original
+component cos 8i,1 , the other components in (14) can be
+expressed with the same form:
+!
+3
+X
+ei 8mi ,1
+cos
+ei = ±1 (1 ≤ mi ≤ K )
+(15)
+i=1
+
+Substituting (4) into (15), we have
+cos 2π
+
+m
+X
+i=1
+
++
+
+m
+X
+
+ei fmi t + 2π
+
+m
+X
+
+ei fmi (dmi sin θ1 /c − τ1 )
+
+i=1
+
+!
+(1)
+ei (π µt 2 − 2π µtτ1 + 2π fd nT + ψ1 + π µτ12 )
+
+.
+
+i=1
+
+(16)
+Pm
+
+For the component with i=1 ei 6= 1, the sweep rate is
+inconsistent with the sweep rate of the original component.
+Thus, after the dechirp processing, the quadratic term about
+t cannot be eliminated, and the range transforming can not
+make this component accumulate.
+P
+For the component with m
+i=1 ei = 1, the sweep rate is
+µ. This component will enter a determinate
+Pm channel whose
+frequency fk̄ satisfy
+the
+condition
+f
+≤
+i=1 ei fmi ≤ fk̄ + 1f .
+k̄
+P
+However, since m
+e
+τ
+=
+τ
+,
+this
+component
+will keep
+1
+i=1 i 1
+the distance of the target unchanged, which will not cause
+55583
+
+B. Liu et al.: Signal Processing of Coast-Ship Bistatic HFSWR Using One-Bit Quantized Measurement
+
+interference in the distance
+P dimension. It is worth noting
+that the azimuth term 2π m
+i=1 ei fmi dmi sin θ1 /c is completely
+inconsistent with the original azimuth term 2πfk̄ dk̄ sin θ1 /c of
+the k̄th channel, hence the effects of this components can be
+negligible on the azimuth dimension.
+In summary, the one-bit quantized signal for one target can
+be processed efficiently by using the conventional algorithm
+proposed for the infinite precision samples.
+B. SIGNAL ANALYSIS FOR TWO OR MORE TARGETS
+
+For multiple targets, the one-bit quantized signal has more
+complex high-order cross-components. It is assumed that
+echoes of multiple targets overlap over a certain period of
+time, e.g., in Fig. 3, the segment where target B and target
+C are located.
+When the equation (7) is extended to P(P > 1) targets,
+the real part of the one-bit signal can be expressed as
+vR (t) =
+
+∞
+X
+m1,1 =0
+
+···
+
+∞
+X
+
+······
+
+mK ,1 =0
+
+∞
+X
+m1,P =0
+
+m1,1 ,··· ,mK ,1 ,··· ,m1,P ,··· ,mK ,P , ·
+
+FIGURE 8. Average amplitudes of components of the two targets as a
+function of the SNR of the target 1, when the SNR of target 2 is constant
+at −35 dB.
+
+∞
+X
+
+···
+
+mK ,P =0
+
+K
+P Y
+Y
+
+cos(mk,p 8k,p (t))
+
+p=1 k=1
+
+(17)
+where
+< m1,1 ,··· ,mK ,P >
+2ξ2
+σw
+Z
+P K
+j ∞ e− 2 Y Y
+εmk,p jmk,p Jmk,p (Ap ξ )dξ. (18)
+=−
+π −∞ ξ
+p=1 k=1
+
+According to the analysis in Fig. 4, the magnitudes of the
+5-order components are much smaller than the magnitudes
+of the 3-order components. Therefore, we only analyze the
+3-order components. When P = 2, the 3-order components
+can be divided into the following three categories:
+(1) Self-components of the first target.
+cos 38i,1 , cos 28i,1 cos 8j,1 , cos 8i,1 cos 8j,1 cos 8k,1
+(19)
+(2) Self-components of the second target.
+cos 38i,2 , cos 28i,2 cos 8j,2 , cos 8i,2 cos 8j,2 cos 8k,2
+(20)
+(3) Cross-components.
+cos 28i,1 cos 8j,2 , cos 8i,1 cos 28j,2
+cos 8i,1 cos 8j,1 cos 8k,2 , cos 8i,1 cos 8j,2 cos 8k,2 .
+(21)
+Fig. 8 shows the average magnitudes of the components of
+the two targets as a function of the SNR of target 1. Here,
+the number of array elements K is 8, and the SNR of the
+target 2 is set as a constant at -35 dB.
+55584
+
+FIGURE 9. The average amplitude of different components of two targets
+when the SNR of target 2 is constant at 20 dB.
+
+It can be seen that the average amplitude variation of
+components of target 1 coincides with the average amplitude
+variation of the component of the single target in Fig. 4 (c). As
+shown by the solid blue line in Fig 8, the average amplitude of
+the original component of target 2 remains unchanged as the
+SNR of target 1 increases when the SNR of target 1 is smaller
+than −10 dB, but decreases as the SNR of target 1 increases
+further. It is worth noting that the original component of target 1 gradually approaches the 3-order components of target 2
+when the SNR of target 1 is smaller than −60 dB. However, the 3-order self-components of target 2, as described in
+Section III-A, will not affect traditional processing.
+The cross-components of two targets (gray dashed line)
+always maintain a large gap with the original component
+of the target 1. At low SNR less than -35 dB, the crosscomponent with the largest amplitude is parallel to the original component of target 1. When the SNR of target 1 is greater
+than -35dB, the cross-components will gradually approach
+the original components.
+When the SNR of target 2 is 20 dB, the amplitudes of
+the components of the two targets varies with the SNR of
+target 1 as shown in Fig. 9. It can be seen that the amplitude of original components of target 1 are smaller than the
+VOLUME 8, 2020
+
+B. Liu et al.: Signal Processing of Coast-Ship Bistatic HFSWR Using One-Bit Quantized Measurement
+
+self-components of target 2. According to the analysis in
+Section III-A, the high-order self-components of target 2 can
+be suppressed by range transforming. Then, we analyze the
+cross-components. The signal form of the cross-component
+with the highest amplitude in Fig. 9 can be described
+by
+cos 8i,1 cos 28j,2
+= cos(8i,1 + 28j,2 ) + cos(8i,1 − 28j,2 )
+= cos{2π(fi + 2fj )t + 2π(fi (di sin θ1 /c − τ1 )
++ 2fj (dj sin θ2 /c + 2τ2 )) + 3πµt 2 − 2πµt(τ1 + 2τ2 )
+(1)
+
+(2)
+
++ 2π(fd + 2fd )nT + (ψ1 + 2ψ2 ) + πµ(τ12 + 2τ22 )}
++ cos{2π(fi − 2fj )t + 2π(fi (di sin θ1 /c − τ1 )
+− 2fj (dj sin θ2 /c + 2τ2 )) + πµt 2 − 2πµt(τ1 − 2τ2 )
+(1)
+
+(2)
+
++ 2π(fd − 2fd )nT + (ψ1 − 2ψ2 ) + πµ(τ12 − 2τ22 )}
+(22)
+The sweep rate of the first term of (22) is 3µ, thus this term
+can be ignored in range transforming. And the complex form
+of the second term of (22) can be written as
+cos(8i,1 − 28j,2 )
++ j cos((8i,1 − π/2) − 2(8j,2 − π/2))
+= exp{j(28j,2 − 8i,1 )}
+= exp{j2π(2fj − fi )t + j2π(2fj (dj sin θ2 /c + 2τ2 )
+− fi (di sin θ1 /c − τ1 )) − πµt 2 − 2πµt(2τ2 − τ1 )
+(2)
+
+(1)
+
++2π(2fd − fd )nT + (2ψ2 − ψ1 ) + πµ(τ12 − 2τ22 )}
+(23)
+The above equation means that a false target with a Doppler
+(2)
+(1)
+frequency of (2fd − fd ) will appear at (t = 2τ2 − τ1 ), and
+the angle of this false target cannot be determined from the
+angle term j2π(2fj (dj sin θ2 /c + 2τ2 ) − fi (di sin θ1 /c − τ1 )).
+Simulations in Section V-C will verify the correctness of this
+analysis.
+For bistatic HFSWR, the direct-path-interference (DPI)
+can be regarded as a very powerful target with high SNR [9].
+If the DPI is not removed completely, the range sidelobes of
+the DPI will block other targets and the high-order components generated by one-bit quantization will result in false
+targets. Fortunately, the DPI can be regarded as a target with a
+high SNR, which allows us to use the traditional method [9] to
+obtain the precise reference signals and accurately eliminate
+it.
+For multiple targets, high-order components can still be
+divided into self-components and cross-components. The
+self-components have the same amplitude distribution as that
+with only one target in Fig. 4. And the cross-components
+always have smaller amplitudes than all original components.
+Their amplitude difference will increase with the decrease of
+SNR. Therefore, all high-order components can be ignored
+for coast-ship bistatic HFSWR in an appropriate SNR.
+VOLUME 8, 2020
+
+C. SNR IN THE COAST-SHIP BISTATIC HFSWR
+
+We have analyzed the average amplitudes of all components,
+and we can get a preliminary conclusion that the impact
+of high-order components can be ignored in a small SNR.
+However, how small are the SNRs of the targets?
+From Fig. 8 and 9, it can be concluded that the high-order
+cross-components are smaller than the high-order selfcomponent with the highest amplitude (the dotted line is
+always under the red or blue dashed line). And the amplitude
+difference between the original component and the maximum
+high-order self-component is shown in Fig. 5. We assume that
+the high-order components can be considered to be negligible
+when the amplitude difference between the original component and the maximum high-order self-component is at least
+a given value (e.g. 45dB). At this time, the maximum SNR
+(−20dB) of targets can be determined by the lines in Fig. 5.
+The coast-ship bistatic HFSWR has two characteristics.
+One is the low range resolution, which facilitates long-term
+coherent integration. The other is employing FMICW, which
+leads to a high gain of pulse compression. This means that the
+signal processing gain is high, and the SNR of the target without signal processing can be very low under the given SNR of
+the target detection. For example, assuming that improvement
+of SNR in pulse synthesis (the number of the antennas) is
+K = 16, the frequency space is 1kHz, the sampling point
+during the sweep period (T = 0.5s) is 0.5s ·16kHz = 8000,
+and the number of coherent integration is 128, the total SNR
+gain of signal processing is 16 × 8000 × 128 = 72dB. If the
+SNR of the target detection is set to 15dB, the SNR of the
+unprocessed signal (12) is approximately 15-72 = −57dB.
+At this time, the high-order components is at least 100dB less
+than the original component as shown in Fig. 5. Therefore,
+most targets in the coast-ship bistatic HFSWR meet the application conditions of one-bit quantization.
+In summary, there are three reasons why high-order components can be ignored or why one-bit quantization can be
+applied.
+All types of signals after one-bit quantization bring additional high-order components with lower amplitude. The
+amplitude differences between the original components
+and high-order components will increase with the decrement of SNR. Fortunately, unprocessed radar signals
+generally have a lower SNR.
+• With different bandwidth and signal forms from original
+components, high-order components will be suppressed
+in the time domain (pulse compression), spatial domain
+(beamforming), and Doppler domain (coherent integration).
+• False targets only appear when the SNR is high, which
+is rare especially when the DPI is removed.
+•
+
+IV. MULTI-CARRIER FREQUENCY LFMICW SIGNAL
+PROCESSING
+
+The DPI can be directly set to zero in the time domain,
+which can eliminate the influence of high-order components
+55585
+
+B. Liu et al.: Signal Processing of Coast-Ship Bistatic HFSWR Using One-Bit Quantized Measurement
+
+fundamentally. In addition, it is the DPI that we use to extract
+the reference signals and complete the synthesis processing.
+Details on DPI removal and synthesis processing have been
+given in [9].
+According to the previous analysis, we can ignore the
+high-order components. The one-bit quantized signal (3) can
+be approximated as
+v(n, t) ≈
+
+P X
+K
+X
+
+Ãp g(t − τk,p ) exp(j8k,p (t))
+
+p=1 k=1
+
+≈
+
+P X
+K
+X
+
+Ãp ejψp g(t − τk,p )ej2πfk t+π µt
+
+p=1 k=1
+j2πfk (dk sin θp /c−τp )
+
+e
+e
+
+(p)
+j2πfd nT
+
+·e
+
+2
+
+· e−j2π µtτp
+
+π µτp2
+
+(24)
+
+where n represents the index of the sweep period and Ãp represents the amplitude of the original component after one-bit
+quantization. As shown in Fig. 2, v(n, t) is mixed with the
+referenced signals {exp(j2πfk t + πµt 2 )}K
+k=1 associated with
+the transmitting antenna and then are separated through the
+lowpass filter (LPF) whose output in kth channel is given by
+vk (n, t) =
+
+P
+X
+
+Ãp ejψp · ej2πfk (dk sin θp /c−τp )
+
+respect to the time. Therefore, in order to obtain the parameters of the target, coordinate transformation is also required.
+In this paper, coordinate transformation is the same as that
+in [6], [9]. We will not discuss it in detail.
+V. SIMULATION
+
+In this section, some comparative experiments of one-bit
+quantization and traditional high-precision quantization
+to demonstrate the feasibility of one-bit quantization in
+coast-ship bistatic HFSWR. In all of the following simulations, it is assumed that the transmitting array is ULA
+with 16 antennas (K = 16), the carrier frequency fc =
+6.75MHz, the sweep bandwidth B = 60kHz, 1f = 1kHz,
+the sweep period T = 0.45s, Tr = 3ms, Te = 1ms,
+M = 64, and the noise power 2σw2 is 1. It is known from the
+references [7] that the range-azimuth coupling is serious
+when using sequential carrier frequency distribution. In order
+to suppress the range-azimuth coupling, we use the optimization method in [7] to obtain the optimal carrier frequencies of
+antennas:
+{−2.5, 0.5, 6.5, −0.5, 4.5, 3.5, −7.5, −5.5,
+−6.5, 5.5, −4.5, −3.5, 7.5, 1.5, 2.5, −1.5}
+·1f + fc .
+(28)
+
+p=1
+(p)
+
+e−j2π µtτp · ej2πfd nT · eπ µτp
+
+2
+
+(25)
+
+We convert (25) into range domain by inverse Fourier
+transform:
+v̄k (n, τ ) =
+
+P
+X
+
+(p)
+
+Ãp ejψp · ej2πfk (dk sin θp /c−τp ) · ej2πfd nT
+
+p=1
+
+sin[πB(τ − τp )] −jπB(τ −τp ) π µτp2
+e
+·e
+.
+π µ(τ − τp )
+
+(26)
+
+Let w(τ, θ) = [ej2πf1 (d1 sin θ/c−τ ) , · · · , ej2πfK (dK sin θ/c−τ ) ] and
+v̄(n, τ ) = [v̄1 (n, τ ), · · · , v̄K (n, τ )]. The synthesized output is
+given by
+y(n, τ, θ ) = wH (τ, θ)v̄(n, τ )
+P
+K
+X
+X
+=
+Ãp ejψp
+ej2πfk (dk (sin θp −sin θ)/c−(τp −τ ))
+p=1
+
+k=1
+
+sin[πB(τ − τp )] j2πf (p) nT π µτp2
+e d
+·e
+.
+π µ(τ − τp )
+
+(27)
+
+Finally, the coherent integration over N number of sweep
+period, which is also known as Doppler transform, can be
+implemented by FFT.
+It needs to be emphasized again that θp denotes the direction of target respect to the transmit array, that the time delay
+τp = (RT,p + RR,p )/c is determined by the sum of the
+distance from the transmitting array to the pth target and
+the distance from the pth target to the receiving array, and
+(p)
+that fd is proportional to the derivative of (RT,p + RR,p )
+55586
+
+A. SIGNAL PROCESSING FOR ONE TARGET
+
+In this example, we consider the case of only one target. This
+target with SNR of -25 dB and radial velocity of 26.67 m/s
+is located at the range-azimuth position (320km, 10◦ ).
+Fig. 10 and 11 show the processing results of high-precision
+quantization and one-bit quantization. Fig. 10 (a), (b) and (c)
+show the range-azimuth profile, Doppler-azimuth profile, and
+Doppler-range profile using the traditional high-precision
+quantization. Correspondingly, the processing results using
+one-bit quantization are shown in Fig. 11. It can be seen
+that the peaks of both results are at the same location.
+For ease of comparison, Fig. 12 (a), (b) and (c) show the
+results of one-dimensional processing on range, azimuth,
+and Doppler frequency. In each dimension, the sidelobes
+for one-bit quantization and high-precision quantization are
+approximately consistent. As expected, large peaks exist
+at the position corresponding to target range, azimuth and
+Doppler frequency. In the result of one-bit quantization,
+the most worrying false target did not appear. This means that
+at low SNR, high-order components are negligible after signal
+processing.
+B. SIGNAL PROCESSING FOR MULTIPLE TARGETS
+
+We consider multiple targets in this experiment, and the
+parameters of targets are given in Table 1. Here, we assume
+that all targets are in the same Doppler channel. Fig. 13
+shows the range-azimuth profile of one-bit quantization and
+high-precision quantization. The target positions of the two
+quantization methods are the same.
+VOLUME 8, 2020
+
+B. Liu et al.: Signal Processing of Coast-Ship Bistatic HFSWR Using One-Bit Quantized Measurement
+
+FIGURE 10. Processing results of infinite precision quantization with
+target SNR of −25dB, range of 320km, angle of 10◦ and velocity of
+26.7 m/s. (a) Range-angle profile. (b) Doppler-azimuth profile.
+(c) Doppler-range profile.
+
+FIGURE 11. Processing results of one-bit quantization with target SNR of
+−25dB, range of 320km, angle of 10◦ and velocity of 26.7 m/s.
+(a) Range-angle profile. (b) Doppler-azimuth profile. (c) Doppler-range
+profile.
+
+C. FALSE TARGET
+
+subsection is only to prove the correctness of our theoretical
+analysis.
+The SNR, azimuth, range, and radial velocity of the first
+target are set to 0dB, −20◦ , 200km, 0.22 m/s, respectively.
+The other target with SNR of 10 dB and radial velocity
+of 0 m/s is located at the range-azimuth position (230km,
+30◦ ). The Doppler frequencies of the two targets are 0Hz,
+
+In order to verify the correctness of the analysis on the
+false targets generated by the cross-components, the case
+of two targets with high SNR is considered. Our analysis
+in Section III shows that the false targets will only exist
+in the case of high SNR, and that the SNR of the coast
+bistatic HFSWR is generally low. Thus, the simulation in this
+VOLUME 8, 2020
+
+55587
+
+B. Liu et al.: Signal Processing of Coast-Ship Bistatic HFSWR Using One-Bit Quantized Measurement
+
+TABLE 1. The parameters of each targets.
+
+FIGURE 13. Range-azimuth angle profile when there are 7 targets.
+(a) Infinite precision quantization, (b) One-bit quantization.
+
+FIGURE 12. Comparison of output results with infinite precision
+quantization and one-bit quantization. (a) Range dimension, (b) Azimuth
+dimension, (c) Doppler frequency dimension.
+
+the conclusion in Section III-B that the false target appears at
+(230 × 2 − 200 = 260) km.
+As analyzed in Section III-C, the SNRs of targets
+in the coast-ship bistatic HFSWR are usually very low
+(SNR0dB). As a result, false targets will hardly appear
+in the coast-ship bistatic HFSWR. In the next section, some
+measured data will confirm this.
+VI. MEASURED DATA VALIDATION
+
+0.01Hz, thus they are all in the first Doppler channel. The
+echoes of the two targets overlap by 90%.
+Fig. 14 shows the range-azimuth profile of the first Doppler
+channel. It can be seen that the processing result of one-bit
+quantization has a false target at 260 km. This result supports
+55588
+
+In order to verify the effect of one-bit quantization in practice, some measured data collected from a coast-ship bistatic
+HFSWR are analyzed. This radar system using 14-bit quantization has been introduced in [6], [9]. The transmit array
+of this radar consist of 8 individual three-element Yagi-Uda
+VOLUME 8, 2020
+
+B. Liu et al.: Signal Processing of Coast-Ship Bistatic HFSWR Using One-Bit Quantized Measurement
+
+FIGURE 16. Receive antenna.
+
+FIGURE 14. Range-azimuth angle profile when two targets with SNR of
+(0 dB, 10 dB) are located at (200km, −20◦ ) and (230km, 30◦ ) respectively.
+(a) Infinite precision quantization, (b) One-bit quantization.
+
+FIGURE 17. Measured I/Q two channel digital signal. (a) 14-bit
+quantization, (b) One-bit quantization.
+
+FIGURE 15. Transmit array.
+
+antennas as shown in Fig. 15. The Yagi-Uda antenna is composed of 3 elements, a guiding antenna, an active antenna, and
+a reflecting antenna. Fig. 16 shows the receive antenna placed
+on a moving boat, which is an isotropic vertical monopole.
+The carrier frequency fc = 6.75MHz, the sweep bandwidth
+VOLUME 8, 2020
+
+B = 60kHz, 1f = 3.75kHz, and the sweep period T = 0.5s,
+Tr = 1ms, Te = 300µ s.
+For comparison, one-bit quantized data is obtained
+by one-bit resampling of high-precision quantized data.
+Fig. 17 (a) shows 14-bit quantized data of three sub-pulses.
+Fig. 17 (b) is the corresponding one-bit quantized data. We
+can see that the DPI is very clear and its SNR is much greater
+than 0 dB.
+Since the gain of coherent integration in this radar system
+is much larger than that of synthesis processing, the coherent
+integration may be prior to synthesis processing (equivalent
+transmit beamforming). The range-Doppler profile in the first
+channel is shown in Fig. 18. The results for the other 7 channels are similar to Fig. 18 and are not given here. The number
+of coherent integration is 512, i.e., the integration time is
+512 × 0.5 = 256 s. It can be seen from Fig. 18 (a) and (b)
+that we obtain similar results including sea clutter and several non-cooperative targets. These targets are passing ships
+on the sea. The slices of the synthesis processing in the
+range-Doppler units of the four distinct targets are shown in
+55589
+
+B. Liu et al.: Signal Processing of Coast-Ship Bistatic HFSWR Using One-Bit Quantized Measurement
+
+FIGURE 20. Implementation of multiplication of one-bit signal.
+
+Two advantages can be obtained by using one bit quantization in this radar system: reduced data storage and reduced
+computation of signal processing. In the original radar system, the 14-bit ADC was used and the storage type was 16-bit
+signed integer. If one-bit quantization is used, the data storage
+is reduced by a factor of 16. In Fig. 2, the multiplication
+operation involved in channel separation can be converted
+into the XNOR operation. As shown in Fig. 20, we perform
+the XNOR operation on the sign bit of the reference signal
+and the one-bit quantized data to obtain a new sign bit, and
+then recombine the new sign bit with the data bits of the
+reference signal to obtain the product of the reference signal
+and the one-bit quantized signal.
+FIGURE 18. Range-Doppler profile of the first channel. (a) 14-bit
+quantization, (b) One-bit quantization.
+
+FIGURE 19. Azimuths of targets relative to transmitting station.
+
+Fig. 19. Each target is normalized with its maximum value.
+Obviously, the accuracy of one-bit quantized data can be
+comparable to that of high-precision quantized data.
+55590
+
+VII. CONCLUSION
+
+We introduce one-bit quantization into coast-ship bistatic
+HFSWR to gain many advantages of one-bit quantization,
+such as low cost and low power consumption. Our theoretical
+analysis shows that one-bit quantization does not completely
+distort the original signal, but retains the original component while introducing other high-order components. The
+magnitudes of these high-order components are generally
+smaller than that of the original components. After pulse
+compression, the influence of these high-order components
+will be further reduced. Numerical simulations and analysis
+of measured data show that traditional processing methods in
+the coast-ship bistatic HFSWR are verified to be straightforwardly applied.
+In addition, all radars have an important process, pulse
+compression, which can accumulate the original components
+and filter out the high-order components, then reduce the
+adverse impact of one-bit quantization. Even at high SNR,
+as long as the transmitting waveform and matched filter are
+properly designed, the influence of high-order components
+can be reduced. Thus, we will extend one-bit quantization to
+other radars and our future work will focus on the design of
+the transmitted waveform and pulse filter to reduce the impact
+of high-order components caused by one-bit quantization.
+VOLUME 8, 2020
+
+B. Liu et al.: Signal Processing of Coast-Ship Bistatic HFSWR Using One-Bit Quantized Measurement
+
+REFERENCES
+[1] J. M. Headrick and J. F. Thomason, ‘‘Applications of high-frequency
+radar,’’ Radio Sci., vol. 33, no. 4, pp. 1045–1054, 1998.
+[2] M. Lesturgie, ‘‘Use of STAP techniques to enhance the detection of slow
+targets in shipborne HFSWR,’’ in Proc. Int. Conf. Radar, Aug. 2003,
+pp. 504–509.
+[3] J. Xie, Y. Yuan, and Y. Liu, ‘‘Super-resolution processing for HF surface
+wave radar based on pre-whitened MUSIC,’’ IEEE J. Ocean. Eng., vol. 23,
+no. 4, pp. 313–321, Oct. 1998.
+[4] C. Baixiao, L. Hongliang, and Z. Shouhong, ‘‘Long-time coherent integration based on sparse-array synthetic impulse and aperture radar,’’ in Proc.
+CIE Int. Conf. Radar, Beijing, China, Oct. 2001, pp. 1062–1066.
+[5] C. Duofang, C. Baixiao, and Z. Shouhong, ‘‘Multiple-input multipleoutput radar and sparse array synthetic impulse and aperture radar,’’ in
+Proc. CIE Int. Conf. Radar, Shanghai, China, Oct. 2006, pp. 1–4.
+[6] C. B. Liu, B. X. Chen, and S. H. Zhang, ‘‘Co-channel interference suppression by time and range adaptive processing in bistatic high-frequency
+surface wave synthesis impulse and aperture radar,’’ IET Radar Sonar
+Navig., vol. 3, no. 6, pp. 638–645, 2009.
+[7] H. Su, H. Liu, P. Shui, S. Zhang, and Z. Bao, ‘‘HFSWR based on synthetic impulse and aperture processing,’’ IEE Proc.-Radar, Sonar Navigat.,
+vol. 153, no. 5, pp. 445–453, 2006.
+[8] J. Li and P. Stoica, ‘‘MIMO radar with colocated antennas,’’ IEEE Signal
+Process. Mag., vol. 24, no. 5, pp. 106–114, Sep. 2007.
+[9] C. Baixiao, C. Duofang, Z. Shouhong, Z. Hao, and L. Maocang, ‘‘Experimental system and experimental results for coast-ship Bi/multistatic
+ground-wave over-the-horizon radar,’’ in Proc. CIE Int. Conf. Radar,
+Shanghai, China, Oct. 2006, pp. 1–5.
+[10] J. Ren and J. Li, ‘‘One-bit digital radar,’’ in Proc. 51st Asilomar Conf. Signals, Syst., Comput., Pacific Grove, CA, USA, Oct. 2017, pp. 1142–1146.
+[11] B. Jin, X. Zhang, B. Zhao, and G. Wu, ‘‘One-bit LFM pulse radar:
+Harmonic analysis and target reconstruction,’’ IEEE Access, vol. 7,
+pp. 109482–109494, 2019.
+[12] G. Alberti, G. Schirinzi, G. Franceschetti, and V. Pascazio, ‘‘Time-domain
+convolution of one-bit coded radar signals,’’ IEE Proc. F, Radar Signal
+Process., vol. 138, no. 5, pp. 438–444, Oct. 1991.
+[13] G. Franceschetti, V. Pascazio, and G. Schirinzi, ‘‘Processing of signum
+coded SAR signal: Theory and experiments,’’ IEE Proc. F, Radar Signal
+Process., vol. 138, no. 3, pp. 192–198, Jun. 1991.
+[14] G. Cappuccino, G. Cocorullo, P. Corsonello, and G. Schirinzi, ‘‘Real-time
+processing of one-bit-coded SAR data,’’ in Proc. 8th Medit. Electrotech.
+Conf. Ind. Appl. Power Syst., Comput. Sci. Telecommun. (MELECON),
+Bari, Italy, vol. 1, 1996, pp. 117–119.
+[15] V. Pascazio and G. Schirinzi, ‘‘Synthetic aperture radar imaging by onebit coded signals,’’ Electron. Commun. Eng. J., vol. 10, no. 1, pp. 17–28,
+Feb. 1998.
+[16] O. Bar-Shalom and A. J. Weiss, ‘‘DOA estimation using one-bit quantized measurements,’’ IEEE Trans. Aerosp. Electron. Syst., vol. 38, no. 3,
+pp. 868–884, Jul. 2002.
+[17] Y. Gao, D. Hu, Y. Chen, and Y. Ma, ‘‘Gridless 1-b DOA estimation exploiting SVM approach,’’ IEEE Commun. Lett., vol. 21, no. 10, pp. 2210–2213,
+Oct. 2017.
+[18] L. Jacques, J. N. Laska, P. T. Boufounos, and R. G. Baraniuk, ‘‘Robust 1Bit compressive sensing via binary stable embeddings of sparse vectors,’’
+IEEE Trans. Inf. Theory, vol. 59, no. 4, pp. 2082–2102, Apr. 2013.
+[19] X. Meng and J. Zhu, ‘‘A generalized sparse Bayesian learning algorithm for 1-bit DOA estimation,’’ IEEE Commun. Lett., vol. 22, no. 7,
+pp. 1414–1417, Jul. 2018.
+[20] X. Huang and B. Liao, ‘‘One-bit MUSIC,’’ IEEE Signal Process. Lett.,
+vol. 26, no. 7, pp. 961–965, Jul. 2019.
+[21] C.-L. Liu and P. P. Vaidyanathan, ‘‘One-bit sparse array DOA estimation,’’ in Proc. IEEE Int. Conf. Acoust., Speech Signal Process. (ICASSP),
+New Orleans, LA, USA, Mar. 2017, pp. 3126–3130.
+[22] Y. Li, C. Tao, G. Seco-Granados, A. Mezghani, A. L. Swindlehurst,
+and L. Liu, ‘‘Channel estimation and performance analysis of one-bit
+massive MIMO systems,’’ IEEE Trans. Signal Process., vol. 65, no. 15,
+pp. 4075–4089, Aug. 2017.
+[23] L. Fan, S. Jin, C.-K. Wen, and H. Zhang, ‘‘Uplink achievable rate for
+massive MIMO systems with low-resolution ADC,’’ IEEE Commun. Lett.,
+vol. 19, no. 12, pp. 2186–2189, Dec. 2015.
+
+VOLUME 8, 2020
+
+[24] C. Gianelli, L. Xu, P. Stoica, and J. Li, ‘‘One-bit compressive sampling with time-varying thresholds for sparse parameter estimation,’’ in
+Proc. IEEE Sensor Array Multichannel Signal Process. Workshop (SAM),
+Rio de Janerio, Brazil, Jul. 2016, pp. 1–5.
+[25] C. Gianelli, L. Xu, and J. Li, ‘‘One-bit compressive sampling with timevarying thresholds: Maximum likelihood and the Cramér–Rao bound,’’
+in Proc. 50th Asilomar Conf. Signals, Syst. Comput., Pacific Grove, CA,
+USA, 2016, pp. 399–403.
+[26] A. Ameri, A. Bose, J. Li, and M. Soltanalian, ‘‘One-bit radar processing
+with time-varying sampling thresholds,’’ IEEE Trans. Signal Process.,
+vol. 67, no. 20, pp. 5297–5308, Oct. 2019.
+
+BINGFAN LIU received the B.S. degree from
+Xidian University, in 2015, where he is currently
+pursuing the Ph.D. degree with the National Laboratory of Radar Signal Processing. His research
+interests include signal processing, parameter estimation, MIMO radar, and array signal processing.
+
+BAIXIAO CHEN was born in Anhui, China,
+in 1966. He graduated from the Metallurgy College of East China, in 1987, and the master’s
+degree in circuit and system and the Ph.D. degree
+in signal and information processing from Xidian
+University, in 1994 and 1997, respectively. He was
+with the Metallurgy College of East China, from
+1987 to 1991. He was a Lecturer and an Associate
+Professor, from 1997 to 1999 and from 1996 to
+2003, respectively. Since 1997, he has been a Faculty Member with the National Laboratory of Radar Signal Processing.
+In 2006, he was selected into New Century elitist Support Program of the
+Ministry of Education. He is currently a Professor of signal and information
+processing. His current research interests include radar signal processing,
+new radar system design, array signal processing, and precise guidance.
+
+MINGLEI YANG received the B.E. degree in electronic engineering and the Ph.D. degree in signal
+and information processing from Xidian University, China, in 2004 and 2009, respectively. Since
+2009, he has been with the National Laboratory of
+Radar Signal Processing, Xidian University. From
+2014 to 2015, he was a Visiting Scholar with the
+Elisha Yegal Bar-Ness Center for Wireless Communications and Signal Processing Research, New
+Jersey Institute of Technology. He is currently a
+Professor in signal and information processing. He has published more than
+60 peer-reviewed journals and conference papers, and more than 40 inventions. His research interests include array signal processing, MIMO signal
+processing, and polarization information processing.
+
+55591
+
+
