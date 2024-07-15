@@ -7,8 +7,8 @@ if __name__ == "__main__":
     embedding_model = "Alibaba-NLP/gte-Qwen2-1.5B-instruct"
     # embedding_model = sys.argv[0]
 
-    embedding_path = "ieee/ieee_embedding_1.5B"
-    # embedding_path = "ieee/ieee_embedding_1.5B_SemanticDoubleMerge"
+    # embedding_path = "ieee/ieee_embedding_1.5B"
+    embedding_path = "ieee/ieee_embedding_1.5B_SemanticDoubleMerge"
     # embedding_path = sys.argv[1]
 
     data = "ieee"
