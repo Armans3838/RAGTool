@@ -1,1 +1,2 @@
 llama_index==0.10.55
+transformers==4.42.3

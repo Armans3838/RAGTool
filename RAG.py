@@ -81,13 +81,14 @@ class RAG:
 
         Settings.llm = LlamaCPP(
             # You can pass in the URL to a GGML model to download it automatically
-            model_url="https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-BPE-fix-GGUF/resolve/main/Meta-Llama-3-8B-Instruct-Q5_K_M.gguf",
+            model_url="https://huggingface.co/TheBloke/SciPhi-Self-RAG-Mistral-7B-32k-GGUF/resolve/main/sciphi-self-rag-mistral-7b-32k.Q4_K_M.gguf",
+            # model_url="https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-BPE-fix-GGUF/resolve/main/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf",
             # optionally, you can set the path to a pre-downloaded model instead of model_url
             # model_path="PATH_TO_MODEL",
             temperature=0.7,
-            max_new_tokens=1024,
+            max_new_tokens=256,
             # llama2 has a context window of 4096 tokens, but we set it lower to allow for some wiggle room
-            context_window=7000,
+            context_window=3900,
             # kwargs to pass to __call__()
             generate_kwargs={},
             # kwargs to pass to __init__()
@@ -96,7 +97,7 @@ class RAG:
             # transform inputs into Llama2 format
             messages_to_prompt=messages_to_prompt,
             completion_to_prompt=completion_to_prompt,
-            verbose=True,
+            verbose=False,
             # request_timeout=60
         )
 
