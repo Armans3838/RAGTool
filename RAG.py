@@ -11,6 +11,7 @@ from llama_index.llms.llama_cpp.llama_utils import (messages_to_prompt, completi
 from llama_cpp import Llama
 from llama_index.core import set_global_tokenizer
 from transformers import AutoTokenizer
+import time
 
 
 
@@ -27,8 +28,8 @@ class RAG:
         data = data_path
         embedding_model = model
 
-        RAG.__set_global_settingsLMStudio()
-        # RAG.__set_global_settingsLlamaCPP()
+        # RAG.__set_global_settingsLMStudio()
+        RAG.__set_global_settingsLlamaCPP()
 
 
 
@@ -46,8 +47,13 @@ class RAG:
 
     # Set the global settings for LlamaIndex
     def __set_global_settingsLMStudio():
+        print("Setting global settings for LMStudio- embedding model")
+        time.sleep(2)  # Add a pause of 2 seconds
+
         Settings.embed_model = HuggingFaceEmbedding(model_name=embedding_model)
 
+        print("Setting the global settings for LMStudio- LLM settings")
+        time.sleep(2)  # Add a pause of 2 seconds
         Settings.llm = LMStudio(
             model_name = "lmstudio-community/Meta-Llama-3-8B-Instruct-GGUF",
             base_url="http://localhost:1234/v1",
@@ -57,37 +63,42 @@ class RAG:
 
 
     # Working on allowing this program to be run with LlamaCPP_Python as opposed to LlamaStudio alone. Not done yet.
-    # def __set_global_settingsLlamaCPP():
-    #     Settings.embed_model = HuggingFaceEmbedding(model_name=embedding_model, trust_remote_code=True)
+    def __set_global_settingsLlamaCPP():
+        print("Setting global settings for LlamaCPP- embedding model")
+        time.sleep(2)  # Add a pause of 2 seconds
+        Settings.embed_model = HuggingFaceEmbedding(model_name=embedding_model)
 
-    #     # llm = Llama.from_pretrained(
-    #     #     repo_id="lmstudio-community/Meta-Llama-3-8B-Instruct-BPE-fix-GGUF",
-    #     #     filename="Meta-Llama-3-8B-Instruct-Q5_K_M.gguf",
-    #     #     verbose=False
-    #     # )
+        # llm = Llama.from_pretrained(
+        #     repo_id="lmstudio-community/Meta-Llama-3-8B-Instruct-BPE-fix-GGUF",
+        #     filename="Meta-Llama-3-8B-Instruct-Q5_K_M.gguf",
+        #     verbose=False
+        # )
 
-    #     set_global_tokenizer(AutoTokenizer.from_pretrained("openbmb/MiniCPM-Llama3-V-2_5").encode)
+        # set_global_tokenizer(AutoTokenizer.from_pretrained("openbmb/MiniCPM-Llama3-V-2_5").encode)
 
-    #     Settings.llm = LlamaCPP(
-    #         # You can pass in the URL to a GGML model to download it automatically
-    #         model_url="https://huggingface.co/openbmb/MiniCPM-Llama3-V-2_5/tree/main",
-    #         # optionally, you can set the path to a pre-downloaded model instead of model_url
-    #         model_path=None,
-    #         temperature=0.7,
-    #         max_new_tokens=256,
-    #         # llama2 has a context window of 4096 tokens, but we set it lower to allow for some wiggle room
-    #         context_window=3900,
-    #         # kwargs to pass to __call__()
-    #         generate_kwargs={},
-    #         # kwargs to pass to __init__()
-    #         # set to at least 1 to use GPU
-    #         model_kwargs={"n_gpu_layers": 8},
-    #         # transform inputs into Llama2 format
-    #         messages_to_prompt=messages_to_prompt,
-    #         completion_to_prompt=completion_to_prompt,
-    #         verbose=True,
-    #         # request_timeout=60
-    #     )
+        print("Setting global settings for LlamaCPP- LLM settings")
+        time.sleep(2)  # Add a pause of 2 seconds
+
+        Settings.llm = LlamaCPP(
+            # You can pass in the URL to a GGML model to download it automatically
+            model_url="https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-BPE-fix-GGUF/resolve/main/Meta-Llama-3-8B-Instruct-Q5_K_M.gguf",
+            # optionally, you can set the path to a pre-downloaded model instead of model_url
+            # model_path="PATH_TO_MODEL",
+            temperature=0.7,
+            max_new_tokens=1024,
+            # llama2 has a context window of 4096 tokens, but we set it lower to allow for some wiggle room
+            context_window=7000,
+            # kwargs to pass to __call__()
+            generate_kwargs={},
+            # kwargs to pass to __init__()
+            # set to at least 1 to use GPU
+            model_kwargs={"n_gpu_layers": 16},
+            # transform inputs into Llama2 format
+            messages_to_prompt=messages_to_prompt,
+            completion_to_prompt=completion_to_prompt,
+            verbose=True,
+            # request_timeout=60
+        )
 
 
 
