@@ -68,32 +68,29 @@ class RAG:
         time.sleep(2)  # Add a pause of 2 seconds
         Settings.embed_model = HuggingFaceEmbedding(model_name=embedding_model)
 
-        # llm = Llama.from_pretrained(
-        #     repo_id="lmstudio-community/Meta-Llama-3-8B-Instruct-BPE-fix-GGUF",
-        #     filename="Meta-Llama-3-8B-Instruct-Q5_K_M.gguf",
-        #     verbose=False
-        # )
-
-        # set_global_tokenizer(AutoTokenizer.from_pretrained("openbmb/MiniCPM-Llama3-V-2_5").encode)
+        set_global_tokenizer(AutoTokenizer.from_pretrained("microsoft/Phi-3-mini-4k-instruct").encode)
 
         print("Setting global settings for LlamaCPP- LLM settings")
         time.sleep(2)  # Add a pause of 2 seconds
 
         Settings.llm = LlamaCPP(
             # You can pass in the URL to a GGML model to download it automatically
-            model_url="https://huggingface.co/TheBloke/SciPhi-Self-RAG-Mistral-7B-32k-GGUF/resolve/main/sciphi-self-rag-mistral-7b-32k.Q4_K_M.gguf",
-            # model_url="https://huggingface.co/lmstudio-community/Meta-Llama-3-8B-Instruct-BPE-fix-GGUF/resolve/main/Meta-Llama-3-8B-Instruct-Q4_K_M.gguf",
+            # model_url="https://huggingface.co/TheBloke/SciPhi-Self-RAG-Mistral-7B-32k-GGUF/resolve/main/sciphi-self-rag-mistral-7b-32k.Q4_K_M.gguf",
+            # model_url="https://huggingface.co/bartowski/Meta-Llama-3-8B-Instruct-GGUF/resolve/main/Meta-Llama-3-8B-Instruct-Q5_K_M.gguf",
+            # model_url = "https://huggingface.co/mistralai/Mistral-7B-v0.1/tree/main",
+            # model_url = "https://huggingface.co/TheBloke/MistralLite-7B-GGUF/resolve/main/mistrallite.Q4_K_M.gguf",
+            model_url = "https://huggingface.co/microsoft/Phi-3-mini-4k-instruct-gguf/resolve/main/Phi-3-mini-4k-instruct-q4.gguf",
             # optionally, you can set the path to a pre-downloaded model instead of model_url
             # model_path="PATH_TO_MODEL",
             temperature=0.7,
-            max_new_tokens=256,
+            max_new_tokens=2048,
             # llama2 has a context window of 4096 tokens, but we set it lower to allow for some wiggle room
             context_window=3900,
             # kwargs to pass to __call__()
             generate_kwargs={},
             # kwargs to pass to __init__()
             # set to at least 1 to use GPU
-            model_kwargs={"n_gpu_layers": 16},
+            model_kwargs={"n_gpu_layers": 32},
             # transform inputs into Llama2 format
             messages_to_prompt=messages_to_prompt,
             completion_to_prompt=completion_to_prompt,
